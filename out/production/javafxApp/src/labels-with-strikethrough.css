@@ -1,0 +1,9 @@
+.root {
+	-fx-padding: 16 ;
+	-fx-vgap: 4 ;
+}
+
+.label:withdrawn .text {
+	-fx-strikethrough: true ;
+}
+

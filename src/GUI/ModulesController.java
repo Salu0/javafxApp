@@ -1,16 +1,15 @@
 package GUI;
 
-import Structures.Pg_station;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TextField;
+import Structures.Pg_station;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 
-final class ModulesController {
+public final class ModulesController {
 
-    static FilteredList<Pg_station>  tableFilter(TextField filterField, ObservableList<Pg_station> masterData) {
+    public static FilteredList<Pg_station>  tableFilter(TextField filterField, ObservableList<Pg_station> masterData) {
 
         FilteredList<Pg_station> filteredData = new FilteredList<>(masterData, predicate -> true);
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -50,15 +49,6 @@ final class ModulesController {
             });
         });
         return filteredData;
-    }
-
-    static Timestamp getDateSinceInactive() {
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(nowTime);
-        cal.add(Calendar.DAY_OF_MONTH, -1);
-        nowTime.setTime(cal.getTime().getTime());
-        return nowTime;
     }
 }
 

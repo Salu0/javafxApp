@@ -3,7 +3,7 @@
 	-fx-vgap: 4 ;
 }
 
-.label:withdrawn .text {
+.tabel-row:withdrawn .text {
 	-fx-strikethrough: true ;
 }
 

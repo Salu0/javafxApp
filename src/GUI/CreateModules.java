@@ -1,25 +1,22 @@
 package GUI;
 
 import DBWriters.Readers.Pg_stationTableReader;
+import Structures.Pg_station;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import Structures.Pg_station;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 
 
 public final class CreateModules {
@@ -56,8 +53,8 @@ public final class CreateModules {
         TableColumn<Pg_station, Integer> barName = new TableColumn<Pg_station,Integer>("Bar");
         barName.setCellValueFactory(new PropertyValueFactory<Pg_station,Integer>("barName"));
 
-        TableColumn<Pg_station, String> name = new TableColumn<Pg_station,String>("Name");
-        name.setCellValueFactory(new PropertyValueFactory<Pg_station,String>("name"));
+        TableColumn<Pg_station, Label> name = new TableColumn<Pg_station,Label>("Name");
+        name.setCellValueFactory(new PropertyValueFactory<Pg_station,Label>("name"));
 
         TableColumn<Pg_station, Integer> deleted = new TableColumn<Pg_station,Integer>("Actual State");
         deleted.setCellValueFactory(new PropertyValueFactory<Pg_station,Integer>("deleted"));
@@ -85,30 +82,32 @@ public final class CreateModules {
 
         pg_stationTable.setItems(masterData);
 
+        pg_stationTable.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> System.out.println("mouse entered detected! " + mouseEvent.getSource()));
+
         pg_stationTable.setRowFactory(row -> new TableRow<Pg_station>(){
             @Override
             public void updateItem(Pg_station item, boolean empty){
                 super.updateItem(item, empty);
-                
+
                 if (item == null || empty) {
                     setStyle("");
                 } else {
                     if (item.getDeleted() == 1) {
                         for(int i=0; i < getChildren().size(); i++) {
                             ((Labeled) getChildren().get(i)).setTextFill(Color.GREY);
-                            ((Labeled) getChildren().get(i)).getStyleClass().add("text");
+                            //TODO those 2 next lines doesn't work:
+                            getChildren().get(i).setStyle("-fx-strikethrough: true");
+                            ((Labeled) getChildren().get(i)).setStyle("-fx-strikethrough: true");
                         }
                     } else {
-                        if(getTableView().getSelectionModel().getSelectedItems().contains(item)){
-                            for(int i=0; i<getChildren().size();i++) {
-                                ((Labeled) getChildren().get(i)).setTextFill(Color.WHITE);
-                                ((Labeled) getChildren().get(i)).setFont(Font.font("System", 13));
+                        if ((item.getDateLastInAsTimestamp() != null) && ModulesController.getDateSinceInactive().after(item.getDateLastInAsTimestamp())) {
+                            for (int i=0; i < getChildren().size(); i++) {
+                                ((Labeled) getChildren().get(i)).setTextFill(Color.RED);
                             }
                         }
-                        else{
-                            for(int i=0; i<getChildren().size();i++) {
+                        else {
+                            for(int i=0; i<getChildren().size(); i++) {
                                 ((Labeled) getChildren().get(i)).setTextFill(Color.BLACK);
-                                ((Labeled) getChildren().get(i)).setFont(Font.font("System", 13));
                             }
                         }
                     }
@@ -122,7 +121,6 @@ public final class CreateModules {
 
     public static Button createButton(BorderPane top) {
         Button button = new Button("Show filters");
-
         button.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent e) {

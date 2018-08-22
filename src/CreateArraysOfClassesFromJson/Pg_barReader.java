@@ -1,10 +1,10 @@
 package CreateArraysOfClassesFromJson;
 
 import Serializers.CustomDateJsonSerializer;
+import Structures.Pg_bar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import Structures.Pg_bar;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -24,8 +24,7 @@ public class Pg_barReader {
         try {
             FileReader fr = new FileReader(path);
             BufferedReader br = new BufferedReader(fr);
-            ArrayList<Pg_bar> pg_bars = gson.fromJson(br, new TypeToken<ArrayList<Pg_bar>>(){}.getType());
-            return pg_bars;
+            return gson.fromJson(br, new TypeToken<ArrayList<Pg_bar>>(){}.getType());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;

@@ -7,3 +7,11 @@
 	-fx-strikethrough: true ;
 }
 
+.gridpane {
+    -fx-padding: 16 ;
+	-fx-vgap: 4 ;
+}
+
+.gridpane {
+    -fx-set-alignment: 600 ;
+}
